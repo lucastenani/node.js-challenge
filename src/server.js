@@ -1,8 +1,9 @@
 import htpp from 'node:http'
 
+import { Database } from './database.js'
 import { json } from './middlewares/json.js'
 
-const tasks = []
+const database = new Database()
 
 const server = htpp.createServer(async (req, res) => {
   const { method, url } = req
@@ -10,18 +11,20 @@ const server = htpp.createServer(async (req, res) => {
   await json(req, res)
 
   if (method === 'GET' && url === '/tasks') {
+    const tasks = database.select('tasks')
+
     return res.end(JSON.stringify(tasks))
   } else if (method === 'POST' && url === '/tasks') {
     const { title, description } = req.body
 
-    tasks.push({
-      id: 1,
+    const task = {
       title,
       description,
       completed_at: null,
-      created_at: String(new Date()),
-      updated_at: String(new Date()),
-    })
+    }
+
+    database.insert('tasks', task)
+
     return res.writeHead(201).end()
   } else if (method === 'PUT' && url === '/tasks/:id') {
     return res.writeHead(404).end()
