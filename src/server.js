@@ -2,20 +2,31 @@ import htpp from 'node:http'
 
 const tasks = []
 
-const server = htpp.createServer((req, res) => {
+const server = htpp.createServer(async (req, res) => {
   const { method, url } = req
-  console.log(method)
-  console.log(url)
+  const buffers = []
+
+  for await (const chunk of req) {
+    buffers.push(chunk)
+  }
+
+  try {
+    req.body = JSON.parse(Buffer.concat(buffers).toString())
+  } catch (error) {
+    req.body = null
+  }
 
   if (method === 'GET' && url === '/tasks') {
     return res
       .setHeader('Content-type', 'application/json')
       .end(JSON.stringify(tasks))
   } else if (method === 'POST' && url === '/tasks') {
+    const { title, description } = req.body
+
     tasks.push({
       id: 1,
-      title: 'Cycling',
-      description: 'Cycling on the street',
+      title,
+      description,
       completed_at: null,
       created_at: String(new Date()),
       updated_at: String(new Date()),
