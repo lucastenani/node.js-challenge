@@ -1,11 +1,12 @@
 import { Database } from './database.js'
+import { buildRoutePath } from './utils/build-route-path.js'
 
 const database = new Database()
 
 export const routes = [
   {
     method: 'GET',
-    path: '/tasks',
+    path: buildRoutePath('/tasks'),
     handler: (_, res) => {
       const tasks = database.select('tasks')
 
@@ -14,7 +15,7 @@ export const routes = [
   },
   {
     method: 'POST',
-    path: '/tasks',
+    path: buildRoutePath('/tasks'),
     handler: (req, res) => {
       const { title, description } = req.body
 
@@ -29,7 +30,19 @@ export const routes = [
       return res.writeHead(201).end()
     },
   },
-  { method: 'PUT', path: '/tasks/:id', handler: (req, res) => {} },
-  { method: 'DELETE', path: '/tasks/:id', handler: (req, res) => {} },
-  { method: 'PATCH', path: '/tasks/:id/complete', handler: (req, res) => {} },
+  {
+    method: 'PUT',
+    path: buildRoutePath('/tasks/:id'),
+    handler: (req, res) => {},
+  },
+  {
+    method: 'DELETE',
+    path: buildRoutePath('/tasks/:id'),
+    handler: (req, res) => {},
+  },
+  {
+    method: 'PATCH',
+    path: buildRoutePath('/tasks/:id/complete'),
+    handler: (req, res) => {},
+  },
 ]
