@@ -56,4 +56,20 @@ export class Database {
       this.#persist()
     }
   }
+
+  update(table, id, data) {
+    const rowIndex = this.#database[table].findIndex((row) => row.id === id)
+
+    if (rowIndex > -1) {
+      const currentRecord = this.#database[table][rowIndex]
+
+      this.#database[table][rowIndex] = {
+        ...currentRecord,
+        ...data,
+        updated_at: new Date().toISOString(),
+      }
+
+      this.#persist()
+    }
+  }
 }
