@@ -38,7 +38,13 @@ export const routes = [
   {
     method: 'DELETE',
     path: buildRoutePath('/tasks/:id'),
-    handler: (req, res) => {},
+    handler: (req, res) => {
+      const { id } = req.params
+
+      database.delete('tasks', id)
+
+      res.writeHead(204).end()
+    },
   },
   {
     method: 'PATCH',
