@@ -1,7 +1,24 @@
 import { randomUUID } from 'node:crypto'
+import fs from 'node:fs/promises'
+
+const databasePath = new URL('../db.json', import.meta.url)
 
 export class Database {
   #database = {}
+
+  constructor() {
+    fs.readFile(databasePath, 'utf8')
+      .then((data) => {
+        this.#database = JSON.parse(data)
+      })
+      .catch(() => {
+        this.#persist()
+      })
+  }
+
+  #persist() {
+    fs.writeFile(databasePath, JSON.stringify(this.#database))
+  }
 
   #generateTimestamps() {
     const now = new Date()
@@ -25,6 +42,8 @@ export class Database {
     Array.isArray(this.#database[table])
       ? this.#database[table].push(record)
       : (this.#database[table] = [record])
+
+    this.#persist()
 
     return data
   }
