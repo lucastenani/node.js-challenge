@@ -43,7 +43,7 @@ export const routes = [
 
         return res.writeHead(201).end()
       } catch (error) {
-        return res.writeHead(400).end('Mandatory fields are missing')
+        return res.writeHead(400).end()
       }
     },
   },
@@ -66,9 +66,9 @@ export const routes = [
 
         database.update('tasks', id, task)
 
-        res.writeHead(204).end()
+        return res.writeHead(204).end()
       } catch (error) {
-        res.writeHead(400).end('Mandatory fields are missing')
+        return res.writeHead(400).end(error.message)
       }
     },
   },
@@ -76,22 +76,30 @@ export const routes = [
     method: 'DELETE',
     path: buildRoutePath('/tasks/:id'),
     handler: (req, res) => {
-      const { id } = req.params
+      try {
+        const { id } = req.params
 
-      database.delete('tasks', id)
+        database.delete('tasks', id)
 
-      res.writeHead(204).end()
+        return res.writeHead(204).end()
+      } catch (error) {
+        return res.writeHead(400).end(error.message)
+      }
     },
   },
   {
     method: 'PATCH',
     path: buildRoutePath('/tasks/:id/complete'),
     handler: (req, res) => {
-      const { id } = req.params
+      try {
+        const { id } = req.params
 
-      database.complete('tasks', id)
+        database.complete('tasks', id)
 
-      res.end()
+        return res.end()
+      } catch (error) {
+        return res.writeHead(400).end(error.message)
+      }
     },
   },
 ]
