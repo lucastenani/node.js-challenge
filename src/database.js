@@ -80,4 +80,20 @@ export class Database {
       this.#persist()
     }
   }
+
+  complete(table, id) {
+    const rowIndex = this.#database[table].findIndex((row) => row.id === id)
+
+    if (rowIndex > -1) {
+      const currentRecord = this.#database[table][rowIndex]
+
+      this.#database[table][rowIndex] = {
+        ...currentRecord,
+        updated_at: new Date().toISOString(),
+        completed_at: new Date().toISOString(),
+      }
+
+      this.#persist()
+    }
+  }
 }
