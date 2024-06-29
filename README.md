@@ -70,7 +70,7 @@ The project follows a structured layout to maintain clarity and modularity:
 
   - Validate if the `id` exists in the database before updating.
 
-  ## Getting Started
+## Getting Started
 
 To run the server locally, follow these steps:
 
@@ -83,7 +83,7 @@ To run the server locally, follow these steps:
 2. Navigate to the project folder:
 
    ```bash
-   cd task-management-api
+   cd node.js-challenge-tasks
    ```
 
 3. Install the required dependencies:
